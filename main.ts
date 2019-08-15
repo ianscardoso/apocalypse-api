@@ -1,7 +1,5 @@
-import * as restify from 'restify'
+import { Server } from './server'
 
-const server = restify.createServer()
+const server = new Server()
 
-server.listen(8080, function () {
-    console.log('ready on %s', server.url);
-  });
+server.Start()
