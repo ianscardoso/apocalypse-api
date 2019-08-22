@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prestart": "start d:/MongoDB/Server/4.0/bin/mongod.exe --dbpath=d:/MongoDB/Server/4.0/data/",
+    "start": "tsc -w | nodemon dist/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,6 +17,7 @@
   },
   "devDependencies": {
     "@types/mongoose": "^5.5.13",
-    "@types/restify": "^7.2.12"
+    "@types/restify": "^7.2.12",
+    "nodemon": "^1.19.1"
   }
 }
