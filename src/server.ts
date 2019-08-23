@@ -1,5 +1,6 @@
 import * as restify from 'restify'
 import * as mongoose from 'mongoose'
+import { Controller } from './controllers/controller';
 
 export class Server {
     application: restify.Server
@@ -10,25 +11,23 @@ export class Server {
         return mongoose.connect('mongodb://localhost:27017/apocalypse', options)
     }
 
-    initRoutes() {
+    initRoutes(controllers: Controller[]) {
         this.application = restify.createServer({
             name: 'apocalypse-api',
             version: '1.0.0'
         })
+        
+        this.application.use(restify.plugins.bodyParser())
+        
+        for (let controller of controllers)
+            controller.setRoutes(this.application)
 
-        this.application.get('/', (req, res, next) => {
-            res.send({ message: 'ok' })
-            next()
-        })
-
-        this.application.listen(8080, () => {
-            console.log('listening on 8080')
-        })
+        this.application.listen(8080)
     }
 
-    bootstrap(): Promise<Server> {
+    bootstrap(controllers: Controller[]): Promise<Server> {
         return this.initDatabase()
-            .then(() => this.initRoutes())
+            .then(() => this.initRoutes(controllers))
             .then(() => this)
     }
 }

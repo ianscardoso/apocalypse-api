@@ -5,8 +5,8 @@ export interface Survivor extends mongoose.Document {
     age: Number,
     gender: String,
     lastLocation: String,
-    inventory: [],
-    trades: [],
+    // inventory: [],
+    // trades: [],
     infectionReports: Number
 }
 
@@ -15,8 +15,8 @@ const survivorSchema = new mongoose.Schema({
     age: Number,
     gender: String,
     lastLocation: String,
-    inventory: [],
-    trades: [],
+    // inventory: [],
+    // trades: [],
     infectionReports: Number
 })
 
