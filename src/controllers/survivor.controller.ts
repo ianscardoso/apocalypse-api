@@ -6,21 +6,49 @@ class SurvivorController extends Controller {
 
     setRoutes(application: restify.Server) {
         application.get('/survivors', (req, res, next) => {
-            Survivor.find().then(survivors => {
-                res.json(survivors)
+            Survivor.find()
+                .then(survivors => {
+                    res.json(survivors)
 
-                return next
-            })
+                    return next
+                })
+        })
+
+        application.get('/survivors/:id', (req, res, next) => {
+            Survivor.findById(req.params.id)
+                .then(survivor => {
+                    res.json(survivor)
+
+                    return next
+                })
         })
 
         application.post('/survivors', (req, res, next) => {
             let survivor = new Survivor(req.body)
 
-            survivor.save().then(survivor => {
-                res.json(survivor)
+            survivor.save()
+                .then(survivor => {
+                    res.json(survivor)
 
-                return next
-            })
+                    return next
+                })
+        })
+
+        application.put('/survivors/:id', (req, res, next) => {
+            const options = {
+                overwrite: true
+            }
+
+            Survivor.update({ _id: req.params.id }, req.body, options).exec()
+                .then(result => {
+                    if (result.n)
+                        Survivor.findById(req.params.id).exec()
+                            .then(survivor => {
+                                res.json(survivor)
+
+                                return next
+                            })
+                })
         })
     }
 
