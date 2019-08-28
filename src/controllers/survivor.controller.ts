@@ -24,14 +24,20 @@ class SurvivorController extends Controller {
         })
 
         application.post('/survivors', (req, res, next) => {
-            for (let survivor of req.body){
-                survivor = new Survivor(req.body)
-                survivor.save()
-            }
-                    // res.json(survivor)
+            let survivorsAdded: Survivor[] = []
 
-                    return next()
-                // })
+            if (req.body.length) {
+                for (let body of req.body) {
+                    let survivor = new Survivor(body)
+                    survivor.save()
+
+                    survivorsAdded.push(survivor)
+                }
+                
+                res.json(survivorsAdded)
+            }
+
+            return next()
         })
 
         application.put('/survivors/:id', (req, res, next) => {
