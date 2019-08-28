@@ -10,7 +10,7 @@ class SurvivorController extends Controller {
                 .then(survivors => {
                     res.json(survivors)
 
-                    return next
+                    return next()
                 })
         })
 
@@ -19,19 +19,19 @@ class SurvivorController extends Controller {
                 .then(survivor => {
                     res.json(survivor)
 
-                    return next
+                    return next()
                 })
         })
 
         application.post('/survivors', (req, res, next) => {
-            let survivor = new Survivor(req.body)
+            for (let survivor of req.body){
+                survivor = new Survivor(req.body)
+                survivor.save()
+            }
+                    // res.json(survivor)
 
-            survivor.save()
-                .then(survivor => {
-                    res.json(survivor)
-
-                    return next
-                })
+                    return next()
+                // })
         })
 
         application.put('/survivors/:id', (req, res, next) => {
@@ -46,8 +46,18 @@ class SurvivorController extends Controller {
                             .then(survivor => {
                                 res.json(survivor)
 
-                                return next
+                                return next()
                             })
+                })
+        })
+
+        application.del('/survivors/:id', (req, res, next) => {
+            Survivor.remove({ _id: req.params.id }).exec()
+                .then(result => {
+                    if (result.deletedCount)
+                        res.json(204)
+
+                    return next()
                 })
         })
     }
