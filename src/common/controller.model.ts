@@ -28,22 +28,10 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
     }
 
     insert = (req, res, next) => {
-        let documentsAdded: any[] = []
-
-        if (req.body && req.body.length) {
-            for (let body of req.body) {
-                let document = new this.model(body)
-                document.save()
-                    .catch(next)
-
-                documentsAdded.push(document)
-            }
-
-            res.json(documentsAdded) //TODO -  fix response in case of error
-        }
-        else {
-            res.json(400)
-        }
+        let document = new this.model(req.body)
+        document.save()
+            .then(doc => { res.json(doc) })
+            .catch(next)
 
         return next()
     }
@@ -69,9 +57,11 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
         this.model.remove({ _id: req.params.id }).exec()
             .then(result => {
                 if (result.deletedCount)
-                    res.json(204)
-
-                return next()
+                    res.send(204)
+                else
+                    res.send(404)
             })
+
+        return next()
     }
 }

@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose'
 
 export interface InventoryItem extends mongoose.Document {
     description: string,
+    quantity: number,
     points: number
 }
 
@@ -17,6 +18,7 @@ export interface Survivor extends mongoose.Document {
 
 const inventoryItemSchema = new mongoose.Schema({
     description: String,
+    quantity: Number,
     points: Number
 })
 
@@ -39,7 +41,8 @@ const survivorSchema = new mongoose.Schema({
     },
     inventory: {
         type: [inventoryItemSchema],
-        required: true
+        required: true,
+        select: false
     },
     // trades: [],
     infectionReports: Number
