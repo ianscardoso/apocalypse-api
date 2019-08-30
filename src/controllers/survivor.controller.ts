@@ -8,12 +8,26 @@ class SurvivorController extends ControllerModel<Survivor> {
         super(Survivor)
     }
 
+    getInventory = (req, res, next) => {
+        Survivor.findById(req.params.id, "+inventory")
+            .then(survivor => {
+                if (survivor)
+                    res.json(survivor.inventory)
+                else
+                    res.send(404)
+
+                return next()
+            })
+    }
+
     setRoutes(application: restify.Server) {
         application.get(`${this.baseUri}`, this.getAll)
         application.get(`${this.baseUri}/:id`, this.getById)
         application.post(`${this.baseUri}`, this.insert)
         application.put(`${this.baseUri}/:id`, this.replace)
         application.del(`${this.baseUri}/:id`, this.delete)
+
+        application.get(`${this.baseUri}/:id/inventory`, this.getInventory)
     }
 
 }
