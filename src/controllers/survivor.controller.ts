@@ -8,6 +8,11 @@ class SurvivorController extends ControllerModel<Survivor> {
         super(Survivor)
     }
 
+    updateLocation = (req, res, next) => {
+        Survivor.update({ _id: req.params.id }, req.body.location).exec()
+            .then(result)
+    }
+
     getInventory = (req, res, next) => {
         Survivor.findById(req.params.id, "+inventory")
             .then(survivor => {
@@ -28,6 +33,7 @@ class SurvivorController extends ControllerModel<Survivor> {
         application.del(`${this.baseUri}/:id`, this.delete)
 
         application.get(`${this.baseUri}/:id/inventory`, this.getInventory)
+        application.put(`${this.baseUri}/:id/location`, this.updateLocation)
     }
 
 }
