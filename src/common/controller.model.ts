@@ -34,14 +34,16 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
             for (let body of req.body) {
                 let document = new this.model(body)
                 document.save()
+                    .catch(next)
 
                 documentsAdded.push(document)
             }
 
-            res.json(documentsAdded)
+            res.json(documentsAdded) //TODO -  fix response in case of error
         }
-
-        res.json(400)
+        else {
+            res.json(400)
+        }
 
         return next()
     }

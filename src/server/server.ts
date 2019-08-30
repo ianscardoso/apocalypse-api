@@ -1,6 +1,7 @@
 import * as restify from 'restify'
 import * as mongoose from 'mongoose'
-import { Controller } from './controllers/controller';
+import { Controller } from '../controllers/controller';
+import { handleError } from './error.handler'
 
 export class Server {
     application: restify.Server
@@ -27,6 +28,8 @@ export class Server {
                 this.application.listen(8080, () => {
                     resolve(this.application)
                 })
+
+                this.application.on('restifyError', handleError)
             }
             catch (error) {
                 reject(error)

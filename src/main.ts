@@ -1,4 +1,4 @@
-import { Server } from './server'
+import { Server } from './server/server'
 import { survivorController } from './controllers/survivor.controller';
 
 const server = new Server()
