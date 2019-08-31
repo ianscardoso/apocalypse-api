@@ -19,7 +19,6 @@ class SurvivorController extends ControllerModel<Survivor> {
                 return next()
             })
             .catch(next)
-
     }
 
     getInventory = (req, res, next) => {
@@ -32,6 +31,7 @@ class SurvivorController extends ControllerModel<Survivor> {
 
                 return next()
             })
+            .catch(next)
     }
 
     setRoutes(application: restify.Server) {

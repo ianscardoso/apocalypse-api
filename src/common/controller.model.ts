@@ -14,10 +14,9 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
             .then(documents => {
                 res.json(documents)
 
+                return next()
             })
             .catch(next)
-
-        return next()
     }
 
     getById = (req, res, next) => {
@@ -27,19 +26,21 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
                     res.json(document)
                 else
                     res.send(404)
+
+                return next()
             })
             .catch(next)
-
-        return next()
     }
 
     insert = (req, res, next) => {
         let document = new this.model(req.body)
         document.save()
-            .then(doc => { res.json(doc) })
-            .catch(next)
+            .then(doc => {
+                res.json(doc)
 
-        return next()
+                return next()
+            })
+            .catch(next)
     }
 
     replace = (req, res, next) => {
@@ -55,10 +56,10 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
                             res.json(document)
 
                         })
+
+                return next()
             })
             .catch(next)
-
-        return next()
     }
 
     delete = (req, res, next) => {
@@ -68,10 +69,9 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
                     res.send(204)
                 else
                     res.send(404)
+
+                return next()
             })
             .catch(next)
-
-        return next()
-
     }
 }
