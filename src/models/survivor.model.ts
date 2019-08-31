@@ -41,10 +41,13 @@ const survivorSchema = new mongoose.Schema({
     inventory: {
         type: [inventoryItemSchema],
         default: undefined, // arrays in mongoose Models are set as 'default: []'. This is a workaround to require the inventory upon registration
-        required: true,        
+        required: true,
         select: false
     },
-    infectionReports: Number
+    infectionReports: {
+        type: Number,
+        default: 0
+    }
 })
 
 export const Survivor = mongoose.model<Survivor>('Survivor', survivorSchema)

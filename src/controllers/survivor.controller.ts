@@ -7,6 +7,33 @@ class SurvivorController extends ControllerModel<Survivor> {
     constructor() {
         super(Survivor)
     }
+    
+    // this works but is a mess. Fix it later
+    reportInfection = (req, res, next) => {
+        const options = {
+            new: true
+        }
+        
+        Survivor.findById(req.params.id)
+            .then(survivor => {
+                if (survivor) {
+                    if (!survivor.infectionReports) {
+                        survivor.infectionReports = 0
+                    }
+
+                    survivor.infectionReports += 1
+
+                    Survivor.findByIdAndUpdate(req.params.id, survivor, options)
+                        .then(result => {
+                            res.json(result)
+                        })
+                }
+                else
+                    res.send(404)
+
+                return next()
+            })
+    }
 
     updateLastLocation = (req, res, next) => {
         Survivor.findByIdAndUpdate(req.params.id, { lastLocation: req.body.lastLocation })
@@ -43,8 +70,8 @@ class SurvivorController extends ControllerModel<Survivor> {
 
         application.get(`${this.baseUri}/:id/inventory`, this.getInventory)
         application.put(`${this.baseUri}/:id/lastLocation`, this.updateLastLocation)
+        application.put(`${this.baseUri}/:id/infectionReport`, this.reportInfection)
     }
-
 }
 
 export const survivorController = new SurvivorController()
