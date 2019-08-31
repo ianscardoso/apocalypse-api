@@ -16,15 +16,21 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
 
                 return next()
             })
+            .catch(next)
+
     }
 
     getById = (req, res, next) => {
         this.model.findById(req.params.id)
             .then(document => {
-                res.json(document)
+                if (document)
+                    res.json(document)
+                else
+                    res.send(404)
 
                 return next()
             })
+            .catch(next)
     }
 
     insert = (req, res, next) => {
@@ -48,9 +54,11 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
                         .then(document => {
                             res.json(document)
 
-                            return next()
                         })
             })
+            .catch(next)
+
+        return next()
     }
 
     delete = (req, res, next) => {
@@ -60,8 +68,10 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
                     res.send(204)
                 else
                     res.send(404)
-            })
 
-        return next()
+                return next()
+            })
+            .catch(next)
+
     }
 }

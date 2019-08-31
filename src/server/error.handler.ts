@@ -27,6 +27,13 @@ export const handleError = (req: restify.Request, res: restify.Response, error, 
                 errors: messages
             })
             break
+        case 'ResourceNotFoundError':
+            error.statusCode = 400
+            error.message = "Invalid URI"
+            break
+        case 'CastError':
+            error.message = "Invalid ObjectId"
+            break
     }
 
     done()
