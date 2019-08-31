@@ -12,7 +12,6 @@ export interface Survivor extends mongoose.Document {
     gender: string,
     lastLocation: string,
     inventory: InventoryItem[],
-    // trades: [],
     infectionReports: number
 }
 
@@ -41,10 +40,10 @@ const survivorSchema = new mongoose.Schema({
     },
     inventory: {
         type: [inventoryItemSchema],
-        required: true,
+        default: undefined, // arrays in mongoose Models are set as 'default: []'. This is a workaround to require the inventory upon registration
+        required: true,        
         select: false
     },
-    // trades: [],
     infectionReports: Number
 })
 
