@@ -1,10 +1,5 @@
 import * as mongoose from 'mongoose'
-
-export interface InventoryItem extends mongoose.Document {
-    description: string,
-    quantity: number,
-    points: number
-}
+import { InventoryItem } from './InventoryItem.model';
 
 export interface Survivor extends mongoose.Document {
     name: string,
@@ -15,12 +10,7 @@ export interface Survivor extends mongoose.Document {
     infectionReports: number
 }
 
-const inventoryItemSchema = new mongoose.Schema({
-    description: String,
-    quantity: Number,
-    points: Number
-})
-
+const inventoryItemSchema = new InventoryItem().schema;
 const survivorSchema = new mongoose.Schema({
     name: {
         type: String,
