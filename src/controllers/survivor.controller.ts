@@ -11,10 +11,24 @@ class SurvivorController extends ControllerModel<Survivor> {
         Survivor.findById(req.params.id)
             .then(survivor => {
                 if (survivor) {
-                    let infectionReports = ++survivor.infectionReports
+                    if (survivor.isInfected) {
+                        let isInfected = survivor.isInfected
+                        res.json({ isInfected })
 
-                    Survivor.updateOne({ _id: req.params.id }, { infectionReports: infectionReports })
-                        .then(res.json({ infectionReports }))
+                        return
+                    }
+
+                    let infectionReports = survivor.infectionReports + 1
+
+                    if (infectionReports <= 3) {
+                        survivor.infectionReports = infectionReports
+
+                        if (infectionReports == 3)
+                            survivor.isInfected = true
+
+                        Survivor.updateOne({ _id: req.params.id }, survivor)
+                            .then(res.json({ infectionReports }))
+                    }
                 }
                 else
                     res.send(404)
