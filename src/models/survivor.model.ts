@@ -8,6 +8,7 @@ export interface Survivor extends mongoose.Document {
     lastLocation: string,
     inventory: InventoryItem[],
     infectionReports: number
+    isInfected: boolean
 }
 
 const inventoryItemSchema = new InventoryItem().schema;
@@ -37,6 +38,10 @@ const survivorSchema = new mongoose.Schema({
     infectionReports: {
         type: Number,
         default: 0
+    },
+    isInfected: {
+        type: Boolean,
+        default: false
     }
 })
 
