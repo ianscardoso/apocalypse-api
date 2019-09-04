@@ -8,12 +8,8 @@ class TradeController extends ControllerModel<Trade>{
     }
 
     setRoutes(application: restify.Server) {
-<<<<<<< Updated upstream
-        throw new Error("Method not implemented.");
-=======
         application.post(`${this.baseUri}`, this.insert)
         application.get(`${this.baseUri}`, this.getAll)
->>>>>>> Stashed changes
     }
 }
 
