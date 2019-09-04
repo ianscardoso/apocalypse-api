@@ -63,7 +63,7 @@ export abstract class ControllerModel<T extends mongoose.Document> extends Contr
     }
 
     delete = (req, res, next) => {
-        this.model.remove({ _id: req.params.id }).exec()
+        this.model.deleteOne({ _id: req.params.id }).exec()
             .then(result => {
                 if (result.deletedCount)
                     res.send(204)
