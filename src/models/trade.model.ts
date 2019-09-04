@@ -1,5 +1,9 @@
 import * as mongoose from 'mongoose'
+<<<<<<< Updated upstream
 import { InventoryItem } from './InventoryItem.model';
+=======
+import { InventoryItem } from './inventoryItem.model';
+>>>>>>> Stashed changes
 import { Survivor } from './survivor.model';
 
 export interface Trade extends mongoose.Document {

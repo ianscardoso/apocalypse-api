@@ -59,8 +59,10 @@ class SurvivorController extends ControllerModel<Survivor> {
     getInventory = (req, res, next) => {
         Survivor.findById(req.params.id, "+inventory")
             .then(survivor => {
-                if (survivor)
+                if (survivor && !survivor.isInfected)
                     res.json(survivor.inventory)
+                else if (survivor && survivor.isInfected)
+                    res.json({ isInfected: survivor.isInfected })
                 else
                     res.send(404)
 
