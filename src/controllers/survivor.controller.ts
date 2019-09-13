@@ -1,6 +1,8 @@
 import * as restify from 'restify'
 import { Survivor } from '../models/survivor.model';
 import { ControllerModel } from '../common/controller.model';
+import { InventoryItem } from '../models/inventoryItem.model';
+import { response } from 'spdy';
 
 class SurvivorController extends ControllerModel<Survivor> {
     constructor() {
@@ -58,17 +60,17 @@ class SurvivorController extends ControllerModel<Survivor> {
 
     getInventory = (req, res, next) => {
         Survivor.findById(req.params.id, "+inventory")
-            .then(survivor => {
-                if (survivor && !survivor.isInfected)
-                    res.json(survivor.inventory)
-                else if (survivor && survivor.isInfected)
-                    res.json({ isInfected: survivor.isInfected })
-                else
+            .populate('inventory.item')
+            .exec((err, survivor) => {
+                if (err)
+                    return next(err)
+                else if (!survivor)
                     res.send(404)
-
-                return next()
+                else
+                    res.json(survivor.inventory)
             })
-            .catch(next)
+
+        return next()
     }
 
     setRoutes(application: restify.Server) {
