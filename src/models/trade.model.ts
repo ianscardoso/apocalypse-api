@@ -19,7 +19,9 @@ const tradeSchema = new mongoose.Schema({
         required: true
     },
     itemsTradeSurvivor1: {
-        type: [inventoryItemSchema]
+        type: [inventoryItemSchema],
+        required: true,
+        default: undefined
     },
     survivor2: {
         type: mongoose.Types.ObjectId,
@@ -27,7 +29,9 @@ const tradeSchema = new mongoose.Schema({
         required: true
     },
     itemsTradeSurvivor2: {
-        type: [inventoryItemSchema]
+        type: [inventoryItemSchema],
+        required: true,
+        default: undefined
     },
     date: {
         type: Date
