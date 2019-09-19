@@ -11,40 +11,45 @@ class TradeController extends ControllerModel<Trade>{
         super(Trade)
     }
 
-    validateTrade(req, res, next) {
-        if (req.body) {
-            let idSurvivor1 = req.body.survivor1
-            let idSurvivor2 = req.body.survivor2
-            let items1: InventoryItem[] = req.body.itemsTradeSurvivor1
-            let items2: InventoryItem[] = req.body.itemsTradeSurvivor2
-            let pointsSurvivor1 = 0
-            let pointsSurvivor2 = 0
+    validateSurvivor = async (idSurvivor) => {
+        return Survivor.findById(idSurvivor)
+    }
 
-            if (idSurvivor1) {
-                Survivor.findById(idSurvivor1)
-                    .then(survivor => console.log(survivor))
-                    .catch(next)
-            }
+    countTradePoints = async (items: InventoryItem[]) => {
+        let pointsSurvivor = 0
 
-            if (idSurvivor2) {
-                Survivor.findById(idSurvivor2)
-                    .then(survivor => console.log(survivor))
-                    .catch(next)
-            }
-
-            if (items1) {
-                for (let item1 of items1) {
-                    Item.findById(item1.item)
-                        .exec((err, item) => {
-                            pointsSurvivor1 += item.points * item1.quantity
-
-                            console.log("Survivor 1 has " + pointsSurvivor1 + " points for trade")
-                        })
-                }
-            }            
+        for (let inventoryItem of items) {
+            pointsSurvivor += await Item.findById(inventoryItem.item).then((item) => {
+                return item.points * inventoryItem.quantity
+            })
         }
 
-        return next()
+        console.log("Survivor has " + pointsSurvivor + " points for trade")
+
+        return pointsSurvivor
+    }
+
+    validateTrade = async (req, res, next) => {
+        try {
+            if (req.body) {
+                const survivor1 = await this.validateSurvivor(req.body.survivor1)
+                const survivor2 = await this.validateSurvivor(req.body.survivor2)
+                const pointsSurvivor1 = await this.countTradePoints(req.body.itemsTradeSurvivor1)
+                const pointsSurvivor2 = await this.countTradePoints(req.body.itemsTradeSurvivor2)
+
+                console.log("Survivor 1: " + survivor1)
+                console.log("Survivor 2: " + survivor2)
+                console.log("Points survivor 1: " + pointsSurvivor1)
+                console.log("Points survivor 2: " + pointsSurvivor2)
+            }
+
+            res.send(200)
+
+            return next()
+        }
+        catch (error) {
+            return next(error)
+        }
     }
 
     setRoutes(application: restify.Server) {
